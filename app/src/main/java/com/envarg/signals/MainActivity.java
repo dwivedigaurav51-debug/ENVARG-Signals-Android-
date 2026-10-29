@@ -1,0 +1,7 @@
+package com.envarg.signals;
+import android.app.*;import android.os.*;import android.content.*;import android.webkit.*;import android.widget.*;
+public class MainActivity extends Activity {
+ WebView web;
+ @Override public void onCreate(Bundle b){super.onCreate(b);getWindow().setStatusBarColor(0xff0a1328);web=new WebView(this);setContentView(web);web.getSettings().setJavaScriptEnabled(true);web.getSettings().setDomStorageEnabled(true);web.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);web.setWebViewClient(new WebViewClient());web.addJavascriptInterface(new Object(){@JavascriptInterface public void start(){runOnUiThread(()->{if(Build.VERSION.SDK_INT>=33&&checkSelfPermission("android.permission.POST_NOTIFICATIONS")!=android.content.pm.PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"},7);try{startForegroundService(new Intent(MainActivity.this,MonitorService.class));Toast.makeText(MainActivity.this,"Monitoring requested",Toast.LENGTH_SHORT).show();}catch(Exception e){Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();}});}@JavascriptInterface public void stop(){runOnUiThread(()->stopService(new Intent(MainActivity.this,MonitorService.class)));}},"EnvargNative");web.loadUrl("https://envarg-v9-signal.hatchable.site");}
+ @Override public void onBackPressed(){if(web.canGoBack())web.goBack();else super.onBackPressed();}
+}
