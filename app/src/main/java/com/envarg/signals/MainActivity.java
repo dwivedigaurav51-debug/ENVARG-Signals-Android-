@@ -1,7 +1,7 @@
 package com.envarg.signals;
 
 import android.app.Activity;
-import android.app.BiometricPrompt;
+import android.hardware.biometrics.BiometricPrompt;
 import android.app.KeyguardManager;
 import android.content.Intent;
 import android.content.Context;
