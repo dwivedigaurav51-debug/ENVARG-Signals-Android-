@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
             authInProgress = false;
             if(code == BiometricPrompt.BIOMETRIC_ERROR_NO_BIOMETRICS ||
                code == BiometricPrompt.BIOMETRIC_ERROR_HW_UNAVAILABLE ||
-               code == BiometricPrompt.BIOMETRIC_ERROR_NO_BIOMETRIC_HARDWARE)
+               code == BiometricPrompt.BIOMETRIC_ERROR_NO_HARDWARE)
               deviceUnlock();
           }
         });
