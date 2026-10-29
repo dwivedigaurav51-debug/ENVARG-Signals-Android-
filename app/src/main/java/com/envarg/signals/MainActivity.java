@@ -13,6 +13,8 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.net.Uri;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -40,7 +42,16 @@ public class MainActivity extends Activity {
     web.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
     CookieManager.getInstance().setAcceptCookie(true);
     CookieManager.getInstance().setAcceptThirdPartyCookies(web,true);
-    web.setWebViewClient(new WebViewClient());
+    web.setWebViewClient(new WebViewClient() {
+      @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        Uri uri=request.getUrl();
+        String host=uri.getHost();
+        if("https".equalsIgnoreCase(uri.getScheme()) && host!=null &&
+          (host.equals("envarg-v9-signal.hatchable.site") || host.equals("hatchable.com") || host.endsWith(".hatchable.com") || host.equals("accounts.google.com") || host.endsWith(".google.com") || host.equals("google.com"))) return false;
+        try { startActivity(new Intent(Intent.ACTION_VIEW,uri)); } catch(Exception ignored) {}
+        return true;
+      }
+    });
     web.addJavascriptInterface(new Object() {
       @JavascriptInterface public void start() {
         runOnUiThread(() -> {
